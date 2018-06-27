@@ -1,4 +1,4 @@
-#Face Recognition Model
+# Face Recognition Model
 
 Based on the Repository for Face Recognition : https://github.com/ageitgey/face_recognition
 
