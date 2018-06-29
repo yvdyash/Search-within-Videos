@@ -7,6 +7,8 @@ from PIL import Image, ImageDraw
 import face_recognition
 from face_recognition.face_recognition_cli import image_files_in_folder
 import cv2
+#from webapp import db
+#from DB import Actor
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -43,12 +45,18 @@ def predict(X_img, knn_clf=None, model_path=None, distance_threshold=0.6):
     return [(pred, loc) if rec else ("unknown", loc) for pred, loc, rec in zip(knn_clf.predict(faces_encodings), X_face_locations, are_matches)]
 
 
-if __name__ == "__main__":
-    
-    video_capture = cv2.VideoCapture(0)
 
+
+def faceRec(vid_path):
+    video_capture = cv2.VideoCapture(vid_path)
+    length = int(video_capture.get(cv2.CAP_PROP_FRAME_COUNT))
+    frame_no=0
+    print(vid_path)
+    print("Number of total frames are: {}".format(length))
     while True:
         ret, frame = video_capture.read()
+        if not ret:
+            break
         rgb_frame = frame[:, :, ::-1]
         predictions=predict(rgb_frame,model_path="models/trained_knn_model.clf")
         for name, (top, right, bottom, left) in predictions:
@@ -64,7 +72,16 @@ if __name__ == "__main__":
         # Hit 'q' on the keyboard to quit!
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+        frame_no+=1
+        print("Writing frame {} / {}".format(frame_no, length))
+        # if predictions:
+        #     actor=Actor(actorname=predictions[0],frameno=frame_no,image_file="default.jpg",x=predictions[1][0],y=predictions[1][1],z=predictions[1][2],w=predictions[1][3])
+        #     db.session.add(actor)
+        #     db.session.commit()
 
     # Release handle to the webcam
     video_capture.release()
     cv2.destroyAllWindows()
+# destination="/home/yash/Desktop/face_recognition-master/examples/short_hamilton_clip.mp4"
+destination="/home/yash/Desktop/Final/Face reco KNN/src/short_hamilton_clip.mp4"
+faceRec(destination)
