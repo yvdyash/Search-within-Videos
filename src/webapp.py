@@ -43,21 +43,10 @@ def upload():
         print(filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         destination=os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        # target1 = os.path.dirname(file)
-        # filename = file.filename
-        # print(file)
-        # destination = os.path.abspath(file)
         print(destination)
-        #destination = str(destination)
-        #destination="/home/yash/Desktop/Final/Face reco KNN/src/The Speech that Made Obama President.mp4"
-        #unicodedata.normalize('NFKD', destination).encode('ascii','ignore')
-        #unicodedata.normalize('NFKD', destination).encode('ascii','ignore')
-        #print(type(destination))
-        #destination="/home/yash/Desktop/face_recognition-master/examples/short_hamilton_clip.mp4"
         face_reco.faceRec(destination)
 
-        #veg.func(destination)
-
+        
     return render_template("complete.html", value = destination)
 
 # @app.route("/search", methods=['GET', 'POST'])
