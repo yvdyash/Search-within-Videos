@@ -11,6 +11,7 @@ from emo_utils.inference import draw_bounding_box
 from emo_utils.inference import apply_offsets
 from emo_utils.inference import load_detection_model
 from emo_utils.preprocessor import preprocess_input
+import subprocess
 import fr_image 
 #import or_image
 #from webapp import db,Actor
@@ -41,12 +42,13 @@ emotion_window = []
 cv2.namedWindow('window_frame')
 video_capture = cv2.VideoCapture('videoplayback.mp4')
 frame_no=0
-while frame_no<2000:
+length = int(video_capture.get(cv2.CAP_PROP_FRAME_COUNT))
+while frame_no<20:
     bgr_image = video_capture.read()[1]
     gray_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2GRAY)
     rgb_image = cv2.cvtColor(bgr_image, cv2.COLOR_BGR2RGB)
+    faces = detect_faces(face_detection, gray_image)
 
-    # faces = detect_faces(face_detection, gray_image)
     # object_predictions=or_image.evaluate(rgb_image,video_capture)
     # print(object_predictions)
 
@@ -104,6 +106,16 @@ while frame_no<2000:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     frame_no+=1
+
+subprocess.check_output("python eval.py --video='videoplayback.mp4'",shell=True)
+# video_capture = cv2.VideoCapture('videoplayback.mp4')
+# frame_no=0
+# while frame_no<length:
+#     bgr_image = video_capture.read()[1]
+#     object_predictions=or_image.evaluate(rgb_image,video_capture)
+#     print(object_predictions)
+#     frame_no+=1
+
 
 
 
